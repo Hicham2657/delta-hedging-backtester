@@ -1,0 +1,136 @@
+# .gitlab-ci.yml
+#
+# This pipeline runs on every push to give students immediate feedback.
+# It only checks that the code builds and passes the selected subset of
+# unit tests — not the hidden evaluation tests.
+#
+# ── Project-level CI/CD variable (set by the deployment script on each student repo) ──
+#
+# PACKAGES_REPO_URL  (Masked, NOT Protected)
+#   Authenticated clone URL of the shared packages repository, including the
+#   deploy token.  Format:
+#     https://gitlab+deploy-token-<id>:<value>@gitlab.ensimag.fr/group/packages.git
+#   Set automatically by create_repos.py via the packages_repo_url config key.
+#
+# ── Group-level CI/CD variables (Settings → CI/CD → Variables on the EXAM GROUP) ──
+#
+# TEST_FILTER  (optional)
+#   Controls which unit tests are run.
+#   Value : FullyQualifiedName~SomeTestClass|FullyQualifiedName~AnotherClass
+#   If the variable is not set, all tests in the test project are run.
+
+stages:
+  - build
+  - test
+  - backtest
+
+default:
+  image: $DOTNET_SDK_IMAGE
+
+variables:
+  DOTNET_SDK_IMAGE: "mcr.microsoft.com/dotnet/sdk:10.0"  # bump here when targeting a new SDK
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+  DOTNET_NOLOGO: "true"
+  NUGET_PACKAGES: "$CI_PROJECT_DIR/.nuget/packages"
+  NUGET_AUTH_TOKEN: $CI_JOB_TOKEN   # authenticates dotnet restore against the group package registry
+  TEST_FILTER: ""                   # overridden by the group-level variable
+  SOLUTION_DIR: "BacktestSkeleton"    # folder containing the .sln file
+  SOLUTION_FILE: "BacktestSkeleton.slnx"
+  TESTS_DIR: "test-cases"             # folder containing the backtest test cases
+  CONSOLE_PROJECT: "BacktestConsole"  # project whose .dll is used to run backtest cases
+  TESTS_PROJECT: "SkeletonTests"      # project containing the unit tests
+
+cache:
+  key: "nuget-$CI_COMMIT_REF_SLUG"
+  paths:
+    - .nuget/packages/
+
+before_script:
+  - |
+    if [ -n "$PACKAGES_REPO_URL" ]; then
+      echo "Cloning packages repository into $SOLUTION_DIR/local-packages"
+      git clone --depth 1 "$PACKAGES_REPO_URL" "$SOLUTION_DIR/local-packages"
+    else
+      echo "ERROR: PACKAGES_REPO_URL is not set — cannot fetch PricingLibrary"
+      echo "Contact the course staff."
+      exit 1
+    fi
+
+# ── Stage 1: make sure the solution compiles ──────────────────────────────────
+build:
+  stage: build
+  script:
+    - dotnet build $SOLUTION_DIR/$SOLUTION_FILE --configuration Release
+  artifacts:
+    paths:
+      - $SOLUTION_DIR/**/bin/Release/
+    expire_in: 4 hours
+
+# ── Stage 2: run the selected unit tests (skipped when SkeletonTests is absent) ──
+unit-tests:
+  stage: test
+  script:
+    - |
+      csproj="$SOLUTION_DIR/$TESTS_PROJECT/$TESTS_PROJECT.csproj"
+      if [ ! -f "$csproj" ]; then
+        echo "No $TESTS_PROJECT project found — skipping unit tests"
+        exit 0
+      fi
+      results_xml="$(pwd)/$SOLUTION_DIR/$TESTS_PROJECT/TestResults/results.xml"
+      mkdir -p "$(dirname "$results_xml")"
+      if [ -n "$TEST_FILTER" ]; then
+        dotnet test "$csproj" \
+          --configuration Release \
+          --logger "junit;LogFilePath=$results_xml" \
+          --filter "$TEST_FILTER"
+      else
+        dotnet test "$csproj" \
+          --configuration Release \
+          --logger "junit;LogFilePath=$results_xml"
+      fi
+  artifacts:
+    when: always
+    paths:
+      - $SOLUTION_DIR/$TESTS_PROJECT/TestResults/
+    reports:
+      junit: $SOLUTION_DIR/$TESTS_PROJECT/TestResults/results.xml
+    expire_in: 4 weeks
+
+# ── Stage 3: run BacktestConsole on every test case in test-cases/ ───────────
+backtest:
+  stage: backtest
+  script:
+    - |
+      console=$(find "$CI_PROJECT_DIR/$SOLUTION_DIR/$CONSOLE_PROJECT/bin/Release" \
+                     -name "${CONSOLE_PROJECT}.dll" | head -1)
+      if [ -z "$console" ]; then
+        echo "ERROR: ${CONSOLE_PROJECT}.dll not found under $SOLUTION_DIR/$CONSOLE_PROJECT/bin/Release/"
+        echo "Check that the build stage completed successfully."
+        exit 1
+      fi
+      echo "Console runner: $console"
+      mkdir -p TestOutputs
+      failed=0
+      for case_dir in "$TESTS_DIR"/*/; do
+        [ -d "$case_dir" ] || continue
+        case_name=$(basename "$case_dir")
+        params=$(find "$case_dir" -maxdepth 1 -name "*.json" | head -1)
+        data=$(find "$case_dir" -maxdepth 1 -name "*.csv" | head -1)
+        if [ -z "$params" ] || [ -z "$data" ]; then
+          echo "WARNING: '$case_name' is missing a .json or .csv file — skipped"
+          continue
+        fi
+        echo -n "  $case_name ... "
+        if dotnet "$console" "$params" "$data" "TestOutputs/$case_name.json"; then
+          echo "OK"
+        else
+          echo "FAILED"
+          failed=$((failed + 1))
+        fi
+      done
+      [ $failed -eq 0 ]
+  artifacts:
+    when: always
+    paths:
+      - TestOutputs/
+    expire_in: 4 weeks

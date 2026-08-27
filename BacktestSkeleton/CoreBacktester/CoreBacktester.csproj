@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="C:\Users\mnach\.nuget\packages\pricinglibrary\2.0.9\contentFiles\any\net10.0\MarketDataFeed\sample_market.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PricingLibrary" Version="2.0.9" />
+  </ItemGroup>
+
+</Project>
