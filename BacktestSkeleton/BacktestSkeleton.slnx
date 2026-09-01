@@ -1,5 +1,4 @@
 <Solution>
   <Project Path="BacktestConsole/BacktestConsole.csproj" />
   <Project Path="CoreBacktester/CoreBacktester.csproj" />
-  <Project Path="SkeletonTests/SkeletonTests.csproj" />
 </Solution>
