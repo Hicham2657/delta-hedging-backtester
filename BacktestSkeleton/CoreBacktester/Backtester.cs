@@ -4,7 +4,6 @@ using MarketData;
 using PricingLibrary.DataClasses;
 using PricingLibrary.MarketDataFeed;
 using PortfolioHandler;
-using PricingLibrary.RebalancingOracleDescriptions;
 using CoreBacktester.Strategy;
 
 public class Backtester
@@ -17,8 +16,7 @@ public class Backtester
     {
         _dataFeeds = provider.GetDataFeeds().ToList();
         _strategy = strategy;
-        RegularOracleDescription oracleDescription = testParams.RebalancingOracleDescription as RegularOracleDescription;
-        _oracle = new RegularOracle(oracleDescription.Period, _dataFeeds.First().Date);
+        _oracle = OracleFactory.CreateOracle(testParams.RebalancingOracleDescription, _dataFeeds.First());
     }
 
     public List<OutputData> RunBacktest()
