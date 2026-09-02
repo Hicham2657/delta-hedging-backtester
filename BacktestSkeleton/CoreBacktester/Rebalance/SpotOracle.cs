@@ -1,26 +1,30 @@
+using PricingLibrary.MarketDataFeed;
+
 namespace CoreBacktester.Oracle;
 
 public class SpotOracle : IOracle
 {
     private readonly double _threshold;
-    private double[] _lastSpots;
+    private DataFeed _lastFeed;
 
-    public SpotOracle(double threshold, double[] initialSpots)
+    public SpotOracle(double threshold, DataFeed initialFeed)
     {
         _threshold = threshold;
-        _lastSpots = initialSpots.ToArray();
+        _lastFeed = initialFeed;
     }
 
-    public bool ShouldRebalance(DateTime currentDate, double[] currentSpots)
+    public bool ShouldRebalance(DataFeed currentFeed)
     {
-        for (int i = 0; i < currentSpots.Length; i++)
+        foreach (var current in currentFeed.PriceList)
         {
-            if (Math.Abs(currentSpots[i] - _lastSpots[i]) / _lastSpots[i] > _threshold)
+            double lastPrice = _lastFeed.PriceList[current.Key];
+            if (Math.Abs(current.Value - lastPrice) / lastPrice > _threshold)
             {
-                _lastSpots = currentSpots.ToArray();
+                _lastFeed = currentFeed;
                 return true;
             }
         }
+
         return false;
 
     }

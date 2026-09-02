@@ -1,6 +1,7 @@
 ﻿using CoreBacktester;
 using System.Text.Json;
 using CoreBacktester.MarketData;
+using CoreBacktester.Strategy;
 
 // Console.WriteLine("Testing that the PricingLibrary Nuget package is correctly accessed");
 // var distance = PricingLibraryTest.TestMathDateConverter();
@@ -21,8 +22,9 @@ IMarketDataProvider provider = new CsvMarketDataProvider(args[1]);
 // Backtester boucle = new Backtester(provider, testParams);
 // boucle.RunBacktest();
 
+IStrategy strategy = new DeltaHedgingStrategy(testParams);
 
-var backtester = new Backtester(provider, testParams);
+var backtester = new Backtester(provider, testParams, strategy);
 var outputs = backtester.RunBacktest();
 
 var options = new JsonSerializerOptions
@@ -32,3 +34,4 @@ var options = new JsonSerializerOptions
 };
 
 File.WriteAllText(args[2], JsonSerializer.Serialize(outputs, options));
+Console.WriteLine("dfbvd");

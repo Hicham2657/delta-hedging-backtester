@@ -4,37 +4,38 @@ namespace CoreBacktester.PortfolioHandler;
 
 public class Portfolio
 {
-    private double[] _deltas;
+    private Dictionary<string, double> _positions;
     private double _cash;
-    private DateTime _lastUpdate;
+    private DateTime _updateDate;
 
-    private double WeightedSum(double[] spots)
+    private double WeightedSum(Dictionary<string, double> priceList)
     {
-        return spots.Zip(_deltas, (u,v) => u*v).Sum();
+        double sum = 0.0;
+        foreach(var position in _positions)
+        {
+            sum+= position.Value * priceList[position.Key];
+        }
+        return sum;
     }
 
-    public Portfolio(double initialPrice, double[] initialSpots, double[] initialDeltas, DateTime initialDate)
+    public Portfolio(double initialPrice, Dictionary<string, double> initialPositions, DataFeed initialFeed)
     {
-        _deltas = initialDeltas.ToArray();
-        _cash = initialPrice - WeightedSum(initialSpots);
-        _lastUpdate = initialDate;
+        _positions = new Dictionary<string, double>(initialPositions);
+        _cash = initialPrice - WeightedSum(initialFeed.PriceList);
+        _updateDate = initialFeed.Date;
     }
 
-    public void UpdatePortfolio(DateTime newTime)
+    public double Value(DataFeed dataFeed)
     {
-        _cash *= RiskFreeRateProvider.GetRiskFreeRateAccruedValue(_lastUpdate, newTime);
-        _lastUpdate = newTime;
+        double compoundedCash = _cash * RiskFreeRateProvider.GetRiskFreeRateAccruedValue(_updateDate, dataFeed.Date);
+        return  compoundedCash + WeightedSum(dataFeed.PriceList);
     }
 
-    public double Value(double[] spots)
+    public void UpdateCompo(DataFeed currentFeed, Dictionary<string, double> newPositions)
     {
-        return _cash + WeightedSum(spots);
-    }
-
-    public void UpdateCompo(double[] spots, double[] newDeltas)
-    {
-        double oldValue = Value(spots);
-        _deltas = newDeltas.ToArray();
-        _cash = oldValue - WeightedSum(spots);
+        double oldValue = Value(currentFeed);
+        _positions = new Dictionary<string, double>(newPositions);
+        _cash = oldValue - WeightedSum(currentFeed.PriceList);
+        _updateDate = currentFeed.Date;
     }
 }

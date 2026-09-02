@@ -1,3 +1,4 @@
+using PricingLibrary.MarketDataFeed;
 using PricingLibrary.TimeHandler;
 
 namespace CoreBacktester.Oracle;
@@ -13,11 +14,11 @@ public class RegularOracle : IOracle
         _lastRebalanceDate = lastRebalanceDate;
     }
 
-    public bool ShouldRebalance(DateTime currentDate, double[] currentSpots)
+    public bool ShouldRebalance(DataFeed dataFeed)
     {
-        if (MathDateConverter.ConvertToMathDistance(_lastRebalanceDate, currentDate)*252 >= _period)
+        if (MathDateConverter.ConvertToMathDistance(_lastRebalanceDate, dataFeed.Date)*252 >= _period)
         {
-            _lastRebalanceDate = currentDate;
+            _lastRebalanceDate = dataFeed.Date;
             return true;
         }
         return false;
