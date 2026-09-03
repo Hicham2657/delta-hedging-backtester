@@ -1,0 +1,262 @@
+[
+  {
+    "date": "2023-06-22T00:00:00",
+    "value": 1.2392039117033908,
+    "deltas": [
+      0.8142774868239487
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.2392039117033908,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-06-29T00:00:00",
+    "value": 0.9738635432408707,
+    "deltas": [
+      0.7476730772810118
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 0.9759911641287644,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-07-11T00:00:00",
+    "value": 1.1156936471213719,
+    "deltas": [
+      0.7974075810919805
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.1086723600706279,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-07-13T00:00:00",
+    "value": 0.9513985307291017,
+    "deltas": [
+      0.7509953926066981
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 0.9455041743551593,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-07-20T00:00:00",
+    "value": 1.226349164441631,
+    "deltas": [
+      0.8366957987879045
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.228205877833516,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-07-24T00:00:00",
+    "value": 1.4932588752411693,
+    "deltas": [
+      0.891820259414236
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.5015860763477118,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-07-27T00:00:00",
+    "value": 1.7705413071057778,
+    "deltas": [
+      0.9318775421753296
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.7823003853469217,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-08-03T00:00:00",
+    "value": 1.9713814675193806,
+    "deltas": [
+      0.9544984638374097
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.981759597469507,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-08-09T00:00:00",
+    "value": 1.7510217574695837,
+    "deltas": [
+      0.9387391764707195
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.7600640096442906,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-08-17T00:00:00",
+    "value": 2.018622772368129,
+    "deltas": [
+      0.9659270650381131
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 2.0275167615568606,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-08-31T00:00:00",
+    "value": 1.7657644094058416,
+    "deltas": [
+      0.9565113859629839
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.7693817203780213,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-09-18T00:00:00",
+    "value": 1.550265748265586,
+    "deltas": [
+      0.9499983211456792
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.5450477216819465,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-09-22T00:00:00",
+    "value": 1.2497668327491027,
+    "deltas": [
+      0.9155233594120937
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.2452287706353484,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-10-18T00:00:00",
+    "value": 1.4731361548828552,
+    "deltas": [
+      0.9740199506192454
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.4584011044319851,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-10-20T00:00:00",
+    "value": 1.8045177723584356,
+    "deltas": [
+      0.9920678890832101
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.7925115029964012,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-10-30T00:00:00",
+    "value": 1.5101451441748655,
+    "deltas": [
+      0.9870880762673215
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.4969372384302524,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-11-08T00:00:00",
+    "value": 1.228327096593265,
+    "deltas": [
+      0.9810133885597149
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.212479008943406,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-11-23T00:00:00",
+    "value": 1.4514892551461518,
+    "deltas": [
+      0.99948750345938
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.4355386889178696,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-11-24T00:00:00",
+    "value": 1.6983453756180786,
+    "deltas": [
+      0.9999612370646361
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.6824593818876181,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  },
+  {
+    "date": "2023-11-28T00:00:00",
+    "value": 1.4684644515329168,
+    "deltas": [
+      0.9999209874698785
+    ],
+    "deltasStdDev": [
+      0
+    ],
+    "price": 1.4525706975035622,
+    "priceStdDev": 0,
+    "transactionCosts": 0
+  }
+]
